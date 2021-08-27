@@ -1,5 +1,11 @@
 <template>
-    <TodoItem v-for="todo in todos" :key="todo.id" v-bind:todoProps="todo" />
+    <TodoItem
+        v-for="todo in todos"
+        :key="todo.id"
+        :todoProps="todo"
+        @item-completed="markComplete"
+        @delete-item="deleteItem"
+    />
 </template>
 
 <script>
@@ -14,7 +20,7 @@ export default {
             {
                 id: 1,
                 title: 'Viec 1',
-                completed: true,
+                completed: false,
             },
             {
                 id: 2,
@@ -27,8 +33,21 @@ export default {
                 completed: false,
             },
         ]);
+
+        const markComplete = (id) => {
+            todos.value = todos.value.map((todo) => {
+                if (todo.id === id) todo.completed = !todo.completed;
+                return todo;
+            });
+        };
+
+        const deleteItem = (id) => {
+            todos.value = todos.value.filter((todo) => todo.id !== id);
+        };
         return {
-            todos: todos,
+            todos,
+            markComplete,
+            deleteItem,
         };
     },
 };
